@@ -1,2 +1,2 @@
 # forge-mixin-example
-A example for using Mixin in Minecraft Forge
+An example for using Mixin in Minecraft Forge
