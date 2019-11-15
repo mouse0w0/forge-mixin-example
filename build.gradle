@@ -1,0 +1,77 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
+        maven { url = "https://repo.spongepowered.org/maven" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'org.spongepowered.mixin'
+
+version = mod_version
+group = mod_group
+archivesBaseName = mod_id
+
+sourceCompatibility = targetCompatibility = '1.8'
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+minecraft {
+    version = "${minecraft_version}-${forge_version}"
+    runDir = "run"
+    mappings = mappings_version
+    String resolved_core_plugin = mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id);
+    clientJvmArgs += "-Dfml.coreMods.load=${resolved_core_plugin}"
+    serverJvmArgs += "-Dfml.coreMods.load=${resolved_core_plugin}"
+}
+
+repositories {
+    maven { url = "https://repo.spongepowered.org/maven" }
+}
+
+dependencies {
+    provided('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
+        exclude module: 'guava'
+        exclude module: 'commons-io'
+        exclude module: 'gson'
+    }
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        expand 'mod_id': mod_id, 'mod_name': mod_name, 'version': project.version,
+                'mcversion': project.minecraft.version, 'mod_description': mod_description,
+                'mod_author': mod_author
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+jar {
+    from(configurations.provided.collect {
+        it.isDirectory() ? it : zipTree(it)
+    }) {
+        exclude "LICENSE.txt", "META-INF/MANIFSET.MF", "META-INF/maven/**", "META-INF/*.RSA", "META-INF/*.SF"
+    }
+
+    manifest {
+        attributes "FMLCorePlugin": mod_core_plugin
+        attributes "FMLCorePluginContainsFMLMod": "true"
+        attributes "ForceLoadAsMod": "true"
+        attributes "TweakClass": "org.spongepowered.asm.launch.MixinTweaker"
+        attributes "TweakOrder": "0"
+        attributes "MixinConfigs": mod_mixin_configs.replace('${mod_id}', mod_id)
+    }
+}
