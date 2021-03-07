@@ -1,16 +1,18 @@
 buildscript {
     repositories {
-        mavenCentral()
-        jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
+        maven { url = 'https://files.minecraftforge.net/maven' }
         maven { url = "https://repo.spongepowered.org/maven" }
+        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
+
+apply plugin: 'net.minecraftforge.gradle'
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
 
@@ -18,30 +20,41 @@ version = mod_version
 group = mod_group
 archivesBaseName = mod_id
 
-sourceCompatibility = targetCompatibility = '1.8'
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 minecraft {
-    version = "${minecraft_version}-${forge_version}"
-    runDir = "run"
-    mappings = mappings_version
-    String resolved_core_plugin = mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id);
-    clientJvmArgs += "-Dfml.coreMods.load=${resolved_core_plugin}"
-    serverJvmArgs += "-Dfml.coreMods.load=${resolved_core_plugin}"
-    String resolved_core_config = mod_mixin_configs.replace('${mod_id}', mod_id);
-    clientRunArgs += "--mixin ${resolved_core_config}"
-    serverRunArgs += "--mixin ${resolved_core_config}"
+    mappings channel: mappings_channel, version: mappings_version
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    String myJvmArgs = "-Dfml.coreMods.load=${mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id)}"
+    String myRunArgs = "--mixin ${mod_mixin_configs.replace('${mod_id}', mod_id)}"
+    runs {
+        client {
+            args = [myRunArgs]
+            jvmArgs = [myJvmArgs]
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+        }
+
+        server {
+            args = [myRunArgs]
+            jvmArgs = [myJvmArgs]
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+        }
+    }
 }
 
 repositories {
-    mavenCentral()
-    maven { url = "https://repo.spongepowered.org/maven" }
+    maven { url = 'https://repo.spongepowered.org/maven' }
 }
 
 dependencies {
-    provided('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    compile('org.spongepowered:mixin:0.8.3-SNAPSHOT') {
         exclude module: 'guava'
         exclude module: 'commons-io'
         exclude module: 'gson'
@@ -50,13 +63,13 @@ dependencies {
 
 processResources {
     inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+    inputs.property "mcversion", minecraft_version
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
 
         expand 'mod_id': mod_id, 'mod_name': mod_name, 'version': project.version,
-                'mcversion': project.minecraft.version, 'mod_description': mod_description,
+                'mcversion': minecraft_version, 'mod_description': mod_description,
                 'mod_author': mod_author
     }
 
@@ -66,9 +79,11 @@ processResources {
 }
 
 jar {
-    from(configurations.provided.collect {
-        it.isDirectory() ? it : zipTree(it)
-    }) {
+    from {
+        configurations.compile
+                .filter { "mixin-0.8.3-SNAPSHOT.jar" == it.name }
+                .collect { it.isDirectory() ? it : zipTree(it) }
+    } {
         exclude "LICENSE.txt", "META-INF/MANIFSET.MF", "META-INF/maven/**", "META-INF/*.RSA", "META-INF/*.SF"
     }
 
@@ -81,3 +96,5 @@ jar {
         attributes "MixinConfigs": mod_mixin_configs.replace('${mod_id}', mod_id)
     }
 }
+
+jar.finalizedBy('reobfJar')
