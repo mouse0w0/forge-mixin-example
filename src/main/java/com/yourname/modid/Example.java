@@ -1,4 +1,4 @@
-package com.github.mouse0w0.example;
+package com.yourname.modid;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;

@@ -1,4 +1,4 @@
-package com.github.mouse0w0.example.core;
+package com.yourname.modid.core;
 
 import net.minecraftforge.fml.relauncher.CoreModManager;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;

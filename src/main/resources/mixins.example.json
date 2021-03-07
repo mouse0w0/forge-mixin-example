@@ -1,7 +1,9 @@
 {
   "compatibilityLevel": "JAVA_8",
-  "package": "com.github.mouse0w0.example.mixin",
-  "mixins": ["MixinMinecraft"],
+  "package": "com.yourname.modid.mixin",
+  "mixins": [
+    "MixinMinecraft"
+  ],
   "client": [],
   "server": []
 }
