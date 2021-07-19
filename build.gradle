@@ -65,6 +65,10 @@ processResources {
     }
 }
 
+mixin {
+    add sourceSets.main, mod_mixin_refmap.replace('${mod_id}', mod_id)
+}
+
 jar {
     from(configurations.provided.collect {
         it.isDirectory() ? it : zipTree(it)
