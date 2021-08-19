@@ -27,20 +27,16 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
-    String myJvmArgs = "-Dfml.coreMods.load=${mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id)}"
-    String myRunArgs = "--mixin ${mod_mixin_configs.replace('${mod_id}', mod_id)}"
     runs {
         client {
-            args = [myRunArgs]
-            jvmArgs = [myJvmArgs]
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+            property 'fml.coreMods.load', mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id)
         }
 
         server {
-            args = [myRunArgs]
-            jvmArgs = [myJvmArgs]
+            property 'fml.coreMods.load', mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id)
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
         }
