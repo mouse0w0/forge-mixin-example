@@ -47,10 +47,15 @@ repositories {
     maven { url = 'https://repo.spongepowered.org/maven' }
 }
 
+configurations {
+    embed
+    compile.extendsFrom(embed)
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    compile('org.spongepowered:mixin:0.8.3-SNAPSHOT') {
+    embed('org.spongepowered:mixin:0.8.3-SNAPSHOT') {
         exclude module: 'guava'
         exclude module: 'commons-io'
         exclude module: 'gson'
@@ -76,9 +81,7 @@ processResources {
 
 jar {
     from {
-        configurations.compile
-                .filter { "mixin-0.8.3-SNAPSHOT.jar" == it.name }
-                .collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
     } {
         exclude "LICENSE.txt", "META-INF/MANIFSET.MF", "META-INF/maven/**", "META-INF/*.RSA", "META-INF/*.SF"
     }
