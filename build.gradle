@@ -32,11 +32,11 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            property 'fml.coreMods.load', '${mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id)}'
+            property 'fml.coreMods.load', mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id)
         }
 
         server {
-            property 'fml.coreMods.load', '${mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id)}'
+            property 'fml.coreMods.load', mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id)
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
         }
