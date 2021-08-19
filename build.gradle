@@ -40,8 +40,13 @@ repositories {
     maven { url = "https://repo.spongepowered.org/maven" }
 }
 
+configurations {
+    embed
+    compile.extendsFrom(embed)
+}
+
 dependencies {
-    provided('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
+    embed('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
         exclude module: 'guava'
         exclude module: 'commons-io'
         exclude module: 'gson'
@@ -70,7 +75,7 @@ mixin {
 }
 
 jar {
-    from(configurations.provided.collect {
+    from(configurations.embed.collect {
         it.isDirectory() ? it : zipTree(it)
     }) {
         exclude "LICENSE.txt", "META-INF/MANIFSET.MF", "META-INF/maven/**", "META-INF/*.RSA", "META-INF/*.SF"
