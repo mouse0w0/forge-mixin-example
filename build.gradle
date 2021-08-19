@@ -84,7 +84,7 @@ jar {
     }
 
     manifest {
-        attributes "FMLCorePlugin": mod_core_plugin
+        attributes "FMLCorePlugin": mod_core_plugin.replace('${mod_group}', mod_group).replace('${mod_id}', mod_id)
         attributes "FMLCorePluginContainsFMLMod": "false"
         attributes "ForceLoadAsMod": "true"
         attributes "TweakClass": "org.spongepowered.asm.launch.MixinTweaker"
