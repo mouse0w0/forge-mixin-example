@@ -1,6 +1,7 @@
 {
   "compatibilityLevel": "JAVA_8",
   "package": "com.yourname.modid.mixin",
+  "refmap": "refmap.example.json",
   "mixins": [
     "MixinMinecraft"
   ],
