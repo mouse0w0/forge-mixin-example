@@ -54,7 +54,7 @@ configurations {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    embed('org.spongepowered:mixin:0.8.5-SNAPSHOT') {
+    implementation('org.spongepowered:mixin:0.8.5-SNAPSHOT') {
         exclude module: 'guava'
         exclude module: 'commons-io'
         exclude module: 'gson'
