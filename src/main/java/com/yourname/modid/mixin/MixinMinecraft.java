@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.PixelFormat;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,7 +14,8 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class MixinMinecraft {
 
     @Shadow
-    private static Logger LOGGER;
+    @Final
+    private static Logger logger;
 
     @Shadow
     private boolean fullscreen;
@@ -25,7 +27,7 @@ public abstract class MixinMinecraft {
         try {
             Display.create((new PixelFormat()).withDepthBits(24));
         } catch (LWJGLException lwjglexception) {
-            LOGGER.error("Couldn't set pixel format", lwjglexception);
+            logger.error("Couldn't set pixel format", lwjglexception);
             try {
                 Thread.sleep(1000L);
             } catch (InterruptedException e) {
