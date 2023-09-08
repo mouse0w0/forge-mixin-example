@@ -62,8 +62,8 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.version
-    inputs.property "mcversion", minecraft_version
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', minecraft_version
 
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
@@ -87,13 +87,13 @@ jar {
     from {
         configurations.embed.collect { it.isDirectory() ? it : zipTree(it) }
     } {
-        exclude "LICENSE.txt", "META-INF/MANIFSET.MF", "META-INF/maven/**", "META-INF/*.RSA", "META-INF/*.SF"
+        exclude 'LICENSE.txt', 'META-INF/MANIFSET.MF', 'META-INF/maven/**', 'META-INF/*.RSA', 'META-INF/*.SF'
     }
 
     manifest {
-        attributes "ForceLoadAsMod": "true"
-        attributes "TweakClass": "org.spongepowered.asm.launch.MixinTweaker"
-        attributes "TweakOrder": "0"
+        attributes 'ForceLoadAsMod': 'true'
+        attributes 'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker'
+        attributes 'TweakOrder': '0'
     }
 }
 
