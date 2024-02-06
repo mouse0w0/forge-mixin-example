@@ -77,10 +77,11 @@ jar {
         exclude 'LICENSE.txt', 'META-INF/MANIFSET.MF', 'META-INF/maven/**', 'META-INF/*.RSA', 'META-INF/*.SF'
     }
 
-    manifest {
-        attributes 'ForceLoadAsMod': 'true'
-        attributes 'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker'
-        attributes 'TweakOrder': '0'
-        attributes 'MixinConfigs': mod_mixin_configs.replace('${mod_id}', mod_id)
-    }
+    manifest.attributes(
+            'ForceLoadAsMod': 'true',
+            'FMLCorePluginContainsFMLMod': 'true',
+            'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+            'TweakOrder': '0',
+            'MixinConfigs': mod_mixin_configs.replace('${mod_id}', mod_id)
+    )
 }
