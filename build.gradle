@@ -90,11 +90,12 @@ jar {
         exclude 'LICENSE.txt', 'META-INF/MANIFSET.MF', 'META-INF/maven/**', 'META-INF/*.RSA', 'META-INF/*.SF'
     }
 
-    manifest {
-        attributes 'ForceLoadAsMod': 'true'
-        attributes 'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker'
-        attributes 'TweakOrder': '0'
-    }
+    manifest.attributes(
+            'ForceLoadAsMod': 'true',
+            'FMLCorePluginContainsFMLMod': 'true',
+            'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+            'TweakOrder': '0'
+    )
 }
 
 jar.finalizedBy('reobfJar')
