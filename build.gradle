@@ -5,7 +5,11 @@ buildscript {
         maven { url = 'https://repo.spongepowered.org/maven' }
     }
     dependencies {
-        classpath files('forgegradle/ForgeGradle-2.3.4.jar')
+//        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+
+//        An unofficial ForgeGradle with some patches.
+//        Github repo: https://github.com/mouse0w0/ForgeGradle
+        classpath files('forgegradle/ForgeGradle-2.3.8.jar')
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
     }
 }
