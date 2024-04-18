@@ -67,8 +67,10 @@ processResources {
     }
 }
 
-mixin {
-    add sourceSets.main, mod_mixin_refmap.replace('${mod_id}', mod_id)
+sourceSets {
+    main {
+        refMap = mod_mixin_refmap.replace('${mod_id}', mod_id)
+    }
 }
 
 jar {
