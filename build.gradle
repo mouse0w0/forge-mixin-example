@@ -78,8 +78,13 @@ processResources {
     }
 }
 
+sourceSets {
+    main {
+        refMap = mod_mixin_refmap.replace('${mod_id}', mod_id)
+    }
+}
+
 mixin {
-    add sourceSets.main, mod_mixin_refmap.replace('${mod_id}', mod_id)
     config mod_mixin_configs.replace('${mod_id}', mod_id)
 }
 
